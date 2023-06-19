@@ -38,7 +38,7 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "https://godckgo.github.io/Nwitter",
+  "homepage": "https://godckgo.github.io/nwitter",
   "devDependencies": {
     "gh-pages": "^5.0.0"
   }
