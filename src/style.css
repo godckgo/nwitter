@@ -204,7 +204,7 @@ form {
   cursor: pointer;
 }
 
-.nweet__actions span:first-child {
+.nweet__actions span:first-child, span:nth-of-type(2) {
   margin-right: 10px;
 }
 
@@ -273,4 +273,8 @@ form {
   display: block;
   font-size: 12px;
   text-decoration: underline;
+}
+
+.shareBtn {
+
 }

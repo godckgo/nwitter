@@ -23,7 +23,7 @@ const NweetFactory = ({ userObj }) => {
         
         const docRef = await addDoc(collection(dbService, "nweets"), {
             text: nweet, 
-            createdAt: Date.now(),
+            createdAt: new Date(),
             creatorId: userObj.uid,
             attachmentUrl: attachmentUrl
         })
@@ -60,7 +60,7 @@ const NweetFactory = ({ userObj }) => {
                 />
                 <input type="submit" value="&rarr;" className="factoryInput__arrow" />
             </div>
-            <label for="attach-file" className="factoryInput__label">
+            <label htmlFor="attach-file" className="factoryInput__label">
             <span>Add photos</span>
                 <FontAwesomeIcon icon={faPlus} />
             </label>

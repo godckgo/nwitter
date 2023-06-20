@@ -3,7 +3,7 @@ import { doc, deleteDoc, updateDoc } from "firebase/firestore"
 import { ref, deleteObject } from "firebase/storage";
 import { dbService, storageService } from "fbase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
+import { faTrash, faPencilAlt, faShareAlt } from "@fortawesome/free-solid-svg-icons";
 
 const Nweet = ({ nweetObj, isOwner }) => {
     const [editing, setEditing] = useState(false);
@@ -14,8 +14,10 @@ const Nweet = ({ nweetObj, isOwner }) => {
             // delete nweet
             const nweetRef = doc(dbService, "nweets", `${nweetObj.id}`)
             await deleteDoc(nweetRef);
-            // delete photo
-            await deleteObject(ref(storageService, nweetObj.attachmentUrl));
+            if(nweetObj.attachmentUrl !== "") {
+                // delete photo
+                await deleteObject(ref(storageService, nweetObj.attachmentUrl));
+            }
         }
     }
     const toggleEditing = () => {
@@ -33,6 +35,19 @@ const Nweet = ({ nweetObj, isOwner }) => {
         const {target: {value}} = event;
         setNewNweet(value);
     }
+    const onShareClick = async (event) => {
+        const shareData = {
+            title: 'Nwitter',
+            text: 'Check out Nwitter',
+            url: window.location.href
+        }
+        if(navigator.share) {
+            await navigator
+                .share(shareData)
+                .then(() => console.log('Successful share'))
+                .catch((error) => console.log('Error sharing', error));
+        }
+    }
     return (
         <div className="nweet">
             {
@@ -48,17 +63,24 @@ const Nweet = ({ nweetObj, isOwner }) => {
                     (
                     <>
                         <h4>{nweetObj.text}</h4>
+                        {/* <span>{nweetObj.createdAt}</span> */}
                         {nweetObj.attachmentUrl && <img src={nweetObj.attachmentUrl} width="50px" height="50px" />}
-                        {isOwner && (
                         <div className="nweet__actions">
-                            <span onClick={onDelectClick}>
-                                <FontAwesomeIcon icon={faTrash} />
-                            </span>
-                            <span onClick={toggleEditing}>
-                                <FontAwesomeIcon icon={faPencilAlt} />
+                            {isOwner && ( 
+                                <>
+                                <span onClick={onDelectClick}>
+                                    <FontAwesomeIcon icon={faTrash} />
+                                </span>
+                                <span onClick={toggleEditing}>
+                                    <FontAwesomeIcon icon={faPencilAlt} />
+                                </span>
+                                </>
+                            )}
+                            <span className="shareBtn" onClick={onShareClick}>
+                                <FontAwesomeIcon icon={faShareAlt} />
                             </span>
                         </div>
-                        )}
+                        
                     </>
                     )
                 }
